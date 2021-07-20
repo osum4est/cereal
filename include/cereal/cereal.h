@@ -360,75 +360,75 @@ private:
  * Macros to generate save/get/set/etc. functions for properties
  */
 
-#define CEREAL_BEGIN_CUSTOM(type, customConfig)                                            \
-        IMPL_CEREAL_BACKEND()<type> _cereal = IMPL_CEREAL_BACKEND()<type>((customConfig)); \
-    public:                                                                                \
-        IMPL_CEREAL_CTOR(type)                                                             \
+#define CEREAL_BEGIN_CUSTOM(type, custom_config)                                            \
+        IMPL_CEREAL_BACKEND()<type> _cereal = IMPL_CEREAL_BACKEND()<type>((custom_config)); \
+    public:                                                                                 \
+        IMPL_CEREAL_CTOR(type)                                                              \
         void load() { _cereal.load_props(this); }                                           \
-        bool loaded() const { return _cereal.loaded(); }                                   \
-        std::filesystem::path path() const { return _cereal.path(); }                      \
-    PRIVATE_CEREAL_VISIBILITY()                                                            \
+        bool loaded() const { return _cereal.loaded(); }                                    \
+        std::filesystem::path path() const { return _cereal.path(); }                       \
+    PRIVATE_CEREAL_VISIBILITY()                                                             \
         void save() { _cereal.save_props(); }                                               \
         void reset() { _cereal.reset_props(this); }                                         \
-    IMPL_CEREAL_BEGIN(type)                                                                \
+    IMPL_CEREAL_BEGIN(type)                                                                 \
     private:
 
 #define CEREAL_BEGIN(type) \
     CEREAL_BEGIN_CUSTOM(type, cereal_config { })
 
-#define CEREAL_PROP_CUSTOM(name, type, customConfig)            \
-        bool _cereal_##name##_initialized = [&]() {                     \
-            _cereal.add_prop(#name, customConfig);                          \
-            return true;                                                   \
-        }();                                                               \
-    public:                                                                \
-        const type &name() const PRIVATE_CEREAL_OVERRIDE() {               \
-            return _cereal.get_value<type>(this, #name);                    \
-        }                                                                  \
-    PRIVATE_CEREAL_SET_VISIBILITY()                                        \
+#define CEREAL_PROP_CUSTOM(name, type, custom_config)                  \
+        bool _cereal_##name##_initialized = [&]() {                    \
+            _cereal.add_prop(#name, custom_config);                    \
+            return true;                                               \
+        }();                                                           \
+    public:                                                            \
+        const type &name() const PRIVATE_CEREAL_OVERRIDE() {           \
+            return _cereal.get_value<type>(this, #name);               \
+        }                                                              \
+    PRIVATE_CEREAL_SET_VISIBILITY()                                    \
         void set_##name(const type &value) PRIVATE_CEREAL_OVERRIDE() { \
-            _cereal.set_value(this, #name, value);                          \
-        }                                                                  \
+            _cereal.set_value(this, #name, value);                     \
+        }                                                              \
     private:
 
 #define CEREAL_PROP_REQUIRED(name, type) \
     CEREAL_PROP_CUSTOM(name, type, CerealPropConfig<type> { .required = true })
 
-#define CEREAL_NORM_PROP_REQUIRED(name, type, norm)          \
+#define CEREAL_NORM_PROP_REQUIRED(name, type, norm)            \
     CEREAL_PROP_CUSTOM(name, type, (cereal_prop_config<type> { \
-        .required = true,                                               \
-        .normalizer = (norm)                                            \
+        .required = true,                                      \
+        .normalizer = (norm)                                   \
     }))
 
 #define CEREAL_PROP_DEFAULT(name, type, value) \
     CEREAL_PROP_CUSTOM(name, type, CerealPropConfig<type> { .defaultValue = (value) })
 
-#define CEREAL_NORM_PROP_DEFAULT(name, type, value, norm)    \
+#define CEREAL_NORM_PROP_DEFAULT(name, type, value, norm)      \
     CEREAL_PROP_CUSTOM(name, type, (cereal_prop_config<type> { \
-        .defaultValue = (value),                                        \
-        .normalizer = CEREAL_NORM_FUNC(norm, type)                      \
+        .defaultValue = (value),                               \
+        .normalizer = CEREAL_NORM_FUNC(norm, type)             \
     }))
 
 #define CEREAL_PROP(name, type) \
     CEREAL_PROP_CUSTOM(name, type, cereal_prop_config<type> {  })
 
-#define CEREAL_GET(name, type)                    \
-        type _cereal_##name = type();                    \
+#define CEREAL_GET(name, type)                               \
+        type _cereal_##name = type();                        \
     public:                                                  \
         const type &name() const PRIVATE_CEREAL_OVERRIDE() { \
-            return _cereal_##name;                       \
+            return _cereal_##name;                           \
         }                                                    \
     private:
 
-#define CEREAL_GET_PRIVATE_SET(name, type)                      \
-        type _cereal_##name = type();                                  \
-    public:                                                                \
-        const type &name() const PRIVATE_CEREAL_OVERRIDE(){                \
-            return _cereal_##name;                                     \
-        }                                                                  \
-    private:                                                               \
+#define CEREAL_GET_PRIVATE_SET(name, type)                               \
+        type _cereal_##name = type();                                    \
+    public:                                                              \
+        const type &name() const PRIVATE_CEREAL_OVERRIDE(){              \
+            return _cereal_##name;                                       \
+        }                                                                \
+    private:                                                             \
         void set_##name##(const type &value) PRIVATE_CEREAL_OVERRIDE() { \
-            _cereal_##name = value;                                    \
+            _cereal_##name = value;                                      \
         }
 
 #endif

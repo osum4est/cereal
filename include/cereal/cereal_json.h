@@ -2,19 +2,19 @@
 #define IMPL_CEREAL_BACKEND() cereal_json
 
 #undef IMPL_CEREAL_CTOR
-#define IMPL_CEREAL_CTOR(type) \
-    type() = default; \
+#define IMPL_CEREAL_CTOR(type)                                              \
+    type() = default;                                                       \
     explicit type(const nlohmann::json &json) { _cereal.load(this, json); } \
     explicit type(const std::filesystem::path &path) { _cereal.load(this, path); }
 
 #undef IMPL_CEREAL_BEGIN
-#define IMPL_CEREAL_BEGIN(type) \
-    public:                        \
+#define IMPL_CEREAL_BEGIN(type)                                   \
+    public:                                                       \
         friend void from_json(const nlohmann::json &j, type &t) { \
-            t._cereal.load(&t, j); \
-        } \
-        friend void to_json(nlohmann::json &j, const type &t) { \
-            j = t._cereal.json(); \
+            t._cereal.load(&t, j);                                \
+        }                                                         \
+        friend void to_json(nlohmann::json &j, const type &t) {   \
+            j = t._cereal.json();                                 \
         }
 
 #ifndef CEREAL_JSON_H
@@ -35,12 +35,12 @@ public:
         return _cereal_json;
     }
 
-    void load(T* instance, const nlohmann::json &json) {
+    void load(T *instance, const nlohmann::json &json) {
         _cereal_json = json;
         this->load_props(instance);
     }
 
-    void load(T* instance, const std::filesystem::path &path) {
+    void load(T *instance, const std::filesystem::path &path) {
         this->set_path(path);
         this->load_props(instance);
     }
