@@ -1,6 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCUnusedMacroInspection"
-
 /**
  * Serialization backend must define these
  * IMPL_CEREAL_BACKEND()
@@ -432,4 +429,3 @@ private:
         }
 
 #endif
-#pragma clang diagnostic pop
