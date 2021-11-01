@@ -389,7 +389,7 @@ private:
     private:
 
 #define CEREAL_PROP_REQUIRED(name, type) \
-    CEREAL_PROP_CUSTOM(name, type, CerealPropConfig<type> { .required = true })
+    CEREAL_PROP_CUSTOM(name, type, cereal_prop_config<type> { .required = true })
 
 #define CEREAL_NORM_PROP_REQUIRED(name, type, norm)            \
     CEREAL_PROP_CUSTOM(name, type, (cereal_prop_config<type> { \
@@ -398,7 +398,7 @@ private:
     }))
 
 #define CEREAL_PROP_DEFAULT(name, type, value) \
-    CEREAL_PROP_CUSTOM(name, type, CerealPropConfig<type> { .defaultValue = (value) })
+    CEREAL_PROP_CUSTOM(name, type, cereal_prop_config<type> { .default_value = (value) })
 
 #define CEREAL_NORM_PROP_DEFAULT(name, type, value, norm)      \
     CEREAL_PROP_CUSTOM(name, type, (cereal_prop_config<type> { \
