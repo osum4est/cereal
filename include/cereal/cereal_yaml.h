@@ -56,7 +56,7 @@ public:
     }
 
     void load_file(const std::filesystem::path &path) {
-        _cereal_yaml = YAML::LoadFile(path);
+        _cereal_yaml = YAML::LoadFile(path.string());
     }
 
     void save_file(const std::filesystem::path &path) {
