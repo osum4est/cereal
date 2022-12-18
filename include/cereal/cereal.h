@@ -275,7 +275,7 @@ public:
     }
 
     ~cereal() {
-        for (const auto &prop : _props)
+        for (const auto &prop: _props)
             delete prop.second;
     }
 
@@ -302,7 +302,7 @@ public:
     }
 
     void save_props() {
-        for (const auto &prop : _props)
+        for (const auto &prop: _props)
             prop.second->save();
 
         if (_has_file_path)
@@ -313,7 +313,7 @@ public:
         if (_has_file_path)
             load_file(path());
 
-        for (const auto &prop : _props)
+        for (const auto &prop: _props)
             prop.second->load(instance);
 
         _config.init.call(instance, this);
@@ -321,7 +321,7 @@ public:
     }
 
     void reset_props(T *instance) {
-        for (const auto &prop : _props)
+        for (const auto &prop: _props)
             prop.second->reset(instance);
     }
 
@@ -345,7 +345,7 @@ private:
     void copy(const cereal &other) {
         _config = other._config;
         _props.clear();
-        for (const auto &other_prop : other._props)
+        for (const auto &other_prop: other._props)
             _props[other_prop.first] = other_prop.second->clone((BackendType *) this, &_config);
         _props_loaded = other._props_loaded;
         _file_path = other._file_path;
@@ -424,7 +424,7 @@ private:
             return _cereal_##name;                                       \
         }                                                                \
     private:                                                             \
-        void set_##name##(const type &value) PRIVATE_CEREAL_OVERRIDE() { \
+        void set_##name(const type &value) PRIVATE_CEREAL_OVERRIDE() { \
             _cereal_##name = value;                                      \
         }
 

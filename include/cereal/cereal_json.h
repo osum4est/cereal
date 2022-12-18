@@ -4,6 +4,7 @@
 #undef IMPL_CEREAL_CTOR
 #define IMPL_CEREAL_CTOR(type)                                              \
     type() = default;                                                       \
+    explicit type(const std::string &json_str) { _cereal.load(this, json_str); } \
     explicit type(const nlohmann::json &json) { _cereal.load(this, json); } \
     explicit type(const std::filesystem::path &path) { _cereal.load(this, path); }
 
@@ -33,6 +34,11 @@ public:
 
     [[nodiscard]] nlohmann::json json() const {
         return _cereal_json;
+    }
+
+    void load(T *instance, const std::string &json_str) {
+        _cereal_json = nlohmann::json::parse(json_str);
+        this->load_props(instance);
     }
 
     void load(T *instance, const nlohmann::json &json) {

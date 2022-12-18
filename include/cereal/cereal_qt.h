@@ -20,10 +20,19 @@ private:
     QSettings cereal_qt_settings;
 
 public:
-    explicit cereal_qt(const cereal_config &config) : cereal<T, cereal_qt<T>>(config) {}
+    explicit cereal_qt(const cereal_config &config) : cereal<T, cereal_qt<T>>(config) { }
 
     void load(T *instance) {
         this->load_props(instance);
+    }
+
+    void load_file(const std::filesystem::path &path) {
+        cereal_qt_settings.setPath(QSettings::IniFormat, QSettings::UserScope, QString::fromStdString(path.string()));
+    }
+
+    void save_file(const std::filesystem::path &path) {
+        cereal_qt_settings.setPath(QSettings::IniFormat, QSettings::UserScope, QString::fromStdString(path.string()));
+        cereal_qt_settings.sync();
     }
 
     template<class ValueType>
